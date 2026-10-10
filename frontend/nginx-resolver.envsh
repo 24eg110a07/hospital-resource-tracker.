@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ -z "${NGINX_RESOLVER:-}" ]; then
+    NGINX_RESOLVER="$(awk '$1 == "nameserver" { print $2; exit }' /etc/resolv.conf)"
+fi
+
+if [ -z "$NGINX_RESOLVER" ]; then
+    echo "Unable to determine the DNS resolver from /etc/resolv.conf" >&2
+    exit 1
+fi
+
+export NGINX_RESOLVER
