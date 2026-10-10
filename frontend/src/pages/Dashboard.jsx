@@ -8,12 +8,13 @@ export default function Dashboard() {
   if (err) return <div className="error">{err}</div>;
   if (!d) return <p>Loading…</p>;
 
-  const readyStatuses = ["available", "on_duty"];
+  const readyStatuses = ["available", "on_duty", "active"];
   const sum = (statuses) => Object.values(statuses).reduce((total, count) => total + count, 0);
   const teamOnDuty = (d.doctors.on_duty || 0) + (d.staff.on_duty || 0);
   const summary = [
     { label: "Beds available", value: d.beds.available || 0, detail: `of ${sum(d.beds)} beds tracked`, tone: "aqua", mark: "B" },
     { label: "Care team on duty", value: teamOnDuty, detail: `${sum(d.doctors) + sum(d.staff)} doctors & staff tracked`, tone: "violet", mark: "T" },
+    { label: "Critical patients", value: d.patients.critical || 0, detail: `${d.patients.active || 0} active patients tracked`, tone: "rose", mark: "P" },
     { label: "Equipment maintenance", value: d.equipment.maintenance || 0, detail: `${sum(d.equipment)} equipment items tracked`, tone: "amber", mark: "E" },
     { label: "Pending requests", value: d.pending_requests, detail: "Waiting for review", tone: "rose", mark: "R" },
   ];

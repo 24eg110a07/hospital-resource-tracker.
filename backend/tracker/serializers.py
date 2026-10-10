@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import Bed, Doctor, Staff, Equipment, ResourceRequest
+from .models import Bed, Doctor, Staff, Patient, Equipment, ResourceRequest
 
 def make(model):
     meta = type("Meta", (), {"model": model, "fields": "__all__"})
     return type(model.__name__ + "Serializer", (serializers.ModelSerializer,), {"Meta": meta})
 
 BedSerializer, DoctorSerializer = make(Bed), make(Doctor)
-StaffSerializer, EquipmentSerializer = make(Staff), make(Equipment)
+StaffSerializer, PatientSerializer, EquipmentSerializer = make(Staff), make(Patient), make(Equipment)
 
 class RequestSerializer(serializers.ModelSerializer):
     requested_by_name = serializers.CharField(source="requested_by.username", read_only=True)

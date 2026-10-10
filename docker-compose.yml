@@ -27,6 +27,7 @@ services:
       SECRET_KEY: ${SECRET_KEY:-local-docker-only-change-me}
       DEBUG: "True"
       SEED_DEMO_DATA: "true"
+      SEED_DEMO_USERS: "true"
       PORT: "8000"
     depends_on:
       db:

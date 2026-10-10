@@ -8,6 +8,8 @@ export const CONFIGS = {
     fields: [["name", "Name"], ["specialization", "Specialization"], ["department", "Department"], ["schedule", "Duty schedule"], ["status", "Status", duty]] },
   staff: { title: "Staff", singular: "staff member", columns: ["name", "role", "department", "shift", "status"],
     fields: [["name", "Name"], ["role", "Role"], ["department", "Department"], ["shift", "Shift"], ["status", "Status", duty]] },
+  patients: { title: "Patients", singular: "patient", columns: ["patient_id", "ward", "condition", "status"],
+    fields: [["patient_id", "Patient ID"], ["ward", "Ward"], ["condition", "Condition"], ["status", "Status", [["active", "Active"], ["critical", "Critical"], ["discharged", "Discharged"]]]] },
   equipment: { title: "Equipment", singular: "equipment", columns: ["name", "department", "quantity", "status"],
     fields: [["name", "Name"], ["department", "Department"], ["quantity", "Quantity", null, "number"],
       ["status", "Status", [["available", "Available"], ["in_use", "In use"], ["maintenance", "Maintenance"]]]] },

@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, BasePermission, SAFE_METHODS
 from rest_framework.response import Response
-from .models import Bed, Doctor, Staff, Equipment, ResourceRequest
+from .models import Bed, Doctor, Staff, Patient, Equipment, ResourceRequest
 from .serializers import *
 
 def role_of(user):
@@ -34,6 +34,7 @@ def resource_viewset(model, serializer, search):
 BedViewSet = resource_viewset(Bed, BedSerializer, ["bed_number", "ward", "bed_type"])
 DoctorViewSet = resource_viewset(Doctor, DoctorSerializer, ["name", "specialization", "department"])
 StaffViewSet = resource_viewset(Staff, StaffSerializer, ["name", "role", "department"])
+PatientViewSet = resource_viewset(Patient, PatientSerializer, ["patient_id", "ward", "condition"])
 EquipmentViewSet = resource_viewset(Equipment, EquipmentSerializer, ["name", "department"])
 
 class RequestViewSet(viewsets.ModelViewSet):
@@ -67,5 +68,8 @@ def dashboard(request):
     if icu.exists() and not icu.filter(status="available").exists(): alerts.append("No ICU beds available.")
     m = Equipment.objects.filter(status="maintenance").count()
     if m: alerts.append(f"{m} equipment item(s) under maintenance.")
-    return Response({"beds": beds, "doctors": counts(Doctor), "staff": counts(Staff), "equipment": counts(Equipment),
+    patients = counts(Patient)
+    critical = patients.get("critical", 0)
+    if critical: alerts.append(f"{critical} patient(s) marked critical.")
+    return Response({"beds": beds, "doctors": counts(Doctor), "staff": counts(Staff), "patients": patients, "equipment": counts(Equipment),
                      "pending_requests": ResourceRequest.objects.filter(status="pending").count(), "alerts": alerts})

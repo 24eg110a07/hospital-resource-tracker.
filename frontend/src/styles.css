@@ -97,6 +97,8 @@ main { width: 100%; max-width: 1500px; min-width: 0; margin: 0 auto; padding: 34
 .distribution-segment { min-width: 0; background: #a8b3c1; }
 .distribution-segment.available, .distribution-segment.on_duty, .distribution-segment.approved { background: #29ae82; }
 .distribution-segment.occupied, .distribution-segment.in_use, .distribution-segment.rejected { background: #e36c75; }
+.distribution-segment.critical { background: #e36c75; }
+.distribution-segment.active { background: #29ae82; }
 .distribution-segment.reserved, .distribution-segment.pending { background: #8182dc; }
 .distribution-segment.maintenance, .distribution-segment.off_duty { background: #e7a544; }
 .resource-statuses { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px; margin-top: 12px; }
@@ -105,6 +107,8 @@ main { width: 100%; max-width: 1500px; min-width: 0; margin: 0 auto; padding: 34
 .dot { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: #aab5c2; }
 .dot.available, .dot.on_duty, .dot.approved { background: #25a878; }
 .dot.occupied, .dot.in_use, .dot.rejected { background: #dc6370; }
+.dot.critical { background: #dc6370; }
+.dot.active { background: #25a878; }
 .dot.reserved, .dot.pending { background: #7778d1; }
 .dot.maintenance, .dot.off_duty { background: #df9b35; }
 .muted-row { grid-column: 1 / -1; color: #919eac; }
@@ -134,6 +138,8 @@ td.actions, .actions { display: flex; align-items: center; justify-content: flex
 .pill { display: inline-flex; padding: 3px 9px; border-radius: 999px; color: #5f7183; background: #eef2f6; font-size: .72rem; font-weight: 600; }
 .pill.available, .pill.on_duty, .pill.approved { color: #187a59; background: #e1f5eb; }
 .pill.occupied, .pill.in_use, .pill.rejected { color: #bc4d5b; background: #ffeaec; }
+.pill.critical { color: #bc4d5b; background: #ffeaec; }
+.pill.active { color: #187a59; background: #e1f5eb; }
 .pill.reserved, .pill.pending { color: #615ab3; background: #eeedff; }
 .pill.maintenance, .pill.off_duty { color: #a16b1f; background: #fff2de; }
 .inline { display: flex; flex-wrap: wrap; gap: 10px; margin: 17px 0; }

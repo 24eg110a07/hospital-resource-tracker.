@@ -31,6 +31,13 @@ class Staff(models.Model):
     shift = models.CharField(max_length=40, blank=True)
     status = models.CharField(max_length=20, choices=STATUS, default="on_duty")
 
+class Patient(models.Model):
+    STATUS = [("active", "Active"), ("critical", "Critical"), ("discharged", "Discharged")]
+    patient_id = models.CharField(max_length=20, unique=True)
+    ward = models.CharField(max_length=60)
+    condition = models.CharField(max_length=100)
+    status = models.CharField(max_length=20, choices=STATUS, default="active")
+
 class Equipment(models.Model):
     STATUS = [("available", "Available"), ("in_use", "In use"), ("maintenance", "Maintenance")]
     name = models.CharField(max_length=100)

@@ -23,6 +23,8 @@ Create a Render PostgreSQL database, then deploy two Docker web services from th
 
 The frontend's public domain is the live app URL; the backend's public domain is the direct API URL. Keep `SECRET_KEY` and database credentials private.
 
+To load fictional sample beds, doctors, staff, equipment, and patients in a demo deployment, set `SEED_DEMO_DATA=true` on the backend and redeploy. This seeds sample records only, not the default demo login accounts. Do not use this demo app for real patient data; the patient list is intended for fictional/demo records.
+
 ## 1. Backend (Django REST Framework)
     cd backend
     python -m venv venv && venv\Scripts\activate      (Linux/Mac: source venv/bin/activate)
@@ -44,9 +46,9 @@ No MySQL handy? Use SQLite for a quick run:  set USE_SQLITE=1
 Demo logins: admin/admin123 · doctor1/doctor123 · staff1/staff123
 
 ## Roles
-- Admin: add/edit/delete beds, doctors, staff, equipment; approve/reject requests
+- Admin: add/edit/delete beds, doctors, staff, patients, equipment; approve/reject requests
 - Doctor & Staff: view availability, search/filter, submit requests
 
 ## REST API (Token auth: `Authorization: Token <key>`)
-POST /api/login/ · GET /api/dashboard/ · /api/beds/ · /api/doctors/ · /api/staff/ · /api/equipment/ · /api/requests/
+POST /api/login/ · GET /api/dashboard/ · /api/beds/ · /api/doctors/ · /api/staff/ · /api/patients/ · /api/equipment/ · /api/requests/
 Supports `?search=` and `?status=` on resource lists. Django admin: /admin/
