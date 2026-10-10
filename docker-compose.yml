@@ -38,6 +38,7 @@ services:
       - "8082:80"
     environment:
       BACKEND_HOST: backend:8000
+      BACKEND_SCHEME: http
       PORT: "80"
     depends_on:
       - backend

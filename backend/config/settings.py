@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.getenv("DEBUG", "false").lower() in ("1", "true", "yes")
@@ -13,9 +14,14 @@ ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "localhost,
 railway_domain = os.getenv("RAILWAY_PUBLIC_DOMAIN")
 if railway_domain:
     ALLOWED_HOSTS.append(railway_domain)
+render_domain = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if render_domain:
+    ALLOWED_HOSTS.append(render_domain)
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if origin.strip()]
 if railway_domain:
     CSRF_TRUSTED_ORIGINS.append(f"https://{railway_domain}")
+if render_domain:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{render_domain}")
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
     "django.contrib.sessions", "django.contrib.messages", "django.contrib.staticfiles",
@@ -35,8 +41,16 @@ TEMPLATES = [{"BACKEND": "django.template.backends.django.DjangoTemplates", "DIR
     "OPTIONS": {"context_processors": ["django.template.context_processors.request",
     "django.contrib.auth.context_processors.auth", "django.contrib.messages.context_processors.messages"]}}]
 WSGI_APPLICATION = "config.wsgi.application"
-# MySQL (as in project abstract). Set USE_SQLITE=1 to run without MySQL.
-if os.getenv("USE_SQLITE"):
+# Render provides PostgreSQL through DATABASE_URL. Preserve SQLite/MySQL for local development.
+if os.getenv("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.parse(
+            os.environ["DATABASE_URL"],
+            conn_max_age=600,
+            ssl_require=os.getenv("DB_SSL_REQUIRE", "false").lower() in ("1", "true", "yes"),
+        )
+    }
+elif os.getenv("USE_SQLITE"):
     DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
 else:
     DATABASES = {"default": {
