@@ -16,4 +16,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py makemigrations tracker --noinput && python manage.py migrate --noinput && python manage.py collectstatic --noinput && if [ \"$SEED_DEMO_DATA\" = \"true\" ]; then python manage.py seed; fi && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
+CMD ["sh", "-c", "python manage.py makemigrations tracker --noinput && python manage.py migrate --noinput && python manage.py collectstatic --noinput && if [ \"$SEED_DEMO_DATA\" = \"true\" ]; then python manage.py seed; fi && if [ -n \"$BOOTSTRAP_ADMIN_USERNAME$BOOTSTRAP_ADMIN_EMAIL$BOOTSTRAP_ADMIN_PASSWORD\" ]; then python manage.py bootstrap_admin; fi && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
