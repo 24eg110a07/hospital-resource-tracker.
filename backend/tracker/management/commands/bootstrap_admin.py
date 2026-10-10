@@ -30,14 +30,14 @@ class Command(BaseCommand):
                     raise CommandError(
                         f"Username {username!r} already exists but is not an admin."
                     )
-                Profile.objects.update_or_create(user=user, defaults={"role": "admin"})
-                self.stdout.write("Bootstrap admin already exists; no changes made.")
-                return
-
-            user = User.objects.create_superuser(
-                username=username,
-                email=email,
-                password=password,
-            )
+                user.email = email
+                user.set_password(password)
+                user.save(update_fields=["email", "password"])
+            else:
+                user = User.objects.create_superuser(
+                    username=username,
+                    email=email,
+                    password=password,
+                )
             Profile.objects.update_or_create(user=user, defaults={"role": "admin"})
-        self.stdout.write("Bootstrap admin created.")
+        self.stdout.write("Bootstrap admin credentials set.")
