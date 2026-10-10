@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: hospital_tracker
+      MYSQL_USER: tracker
+      MYSQL_PASSWORD: ${DB_PASSWORD:-tracker_dev_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_dev_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$${MYSQL_ROOT_PASSWORD}\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: ./backend
+    ports:
+      - "3032:8000"
+    environment:
+      DB_NAME: hospital_tracker
+      DB_USER: tracker
+      DB_PASSWORD: ${DB_PASSWORD:-tracker_dev_password}
+      DB_HOST: db
+      DB_PORT: "3306"
+      SECRET_KEY: ${SECRET_KEY:-local-docker-only-change-me}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8082:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
